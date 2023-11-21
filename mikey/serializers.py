@@ -13,7 +13,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id','pseudo_id','pseudo_username', 'text', 'created_at', 'likes', 'dislikes', 'parent_comment']
+        fields = ['id','pseudo_id','pseudo_username', 'text', 'created_at', 'likes', 'dislikes', 'parent_comment','liked_by','disliked_by']
 
     def get_pseudo_username(self, obj):
         return obj.pseudo.pseudo

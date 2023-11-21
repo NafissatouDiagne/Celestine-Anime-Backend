@@ -42,6 +42,8 @@ class Comment(models.Model):
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
     parent_comment = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+    liked_by = models.ManyToManyField(Register, related_name='liked_comments', blank=True)
+    disliked_by = models.ManyToManyField(Register, related_name='disliked_comments', blank=True)
 
     '''  @property
     def pseudo_photo(self):

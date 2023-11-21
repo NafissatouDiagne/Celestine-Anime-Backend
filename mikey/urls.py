@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CommentAPIView ,CommentDetailAPIView
+from .views import CommentAPIView ,CommentDetailAPIView,CommentLikeAPIView,CommentDislikeAPIView
 from . import views
 urlpatterns =[
     path('register/',views.register,name='register'),
@@ -8,5 +8,7 @@ urlpatterns =[
     path('api/comments/<int:pseudo_id>/', CommentAPIView.as_view(), name='comment_api'), 
     path('api/comments/<int:pseudo_id>/', CommentAPIView.as_view(), name='comment-list'),
     path('api/comments/<int:pseudo_id>/<int:comment_id>/', CommentDetailAPIView.as_view(), name='comment-detail'),
-
+    path('api/comments/<int:user_id>/<int:comment_id>/like/', CommentLikeAPIView.as_view(), name='comment-like'),
+    path('api/comments/<int:user_id>/<int:comment_id>/dislike/', CommentDislikeAPIView.as_view(), name='comment-dislike'),
+    
 ]

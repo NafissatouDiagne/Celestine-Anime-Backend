@@ -136,3 +136,50 @@ class CommentDetailAPIView(RetrieveUpdateDestroyAPIView):
         # Vous pouvez ajouter une logique supplémentaire avant de supprimer l'instance
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+class CommentLikeAPIView(APIView):
+    def post(self, request,user_id, *args, **kwargs):
+        comment_id = kwargs.get('comment_id')
+        comment = get_object_or_404(Comment, id=comment_id)
+        
+        # Vérifiez si l'utilisateur a déjà mis le like
+       
+        user = Register.objects.get(id=user_id)
+        print("user_id",user)
+        if user in comment.liked_by.all():
+            # L'utilisateur a déjà aimé, annulez le like
+            comment.likes -= 1
+            comment.liked_by.remove(user)
+        else:
+            # L'utilisateur n'a pas encore aimé, ajoutez le like
+            comment.likes += 1
+            comment.liked_by.add(user)
+        
+        # Assurez-vous de sauvegarder l'objet comment après les modifications
+        comment.save()
+
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class CommentDislikeAPIView(APIView):
+    def post(self, request,user_id, *args, **kwargs):
+        comment_id = kwargs.get('comment_id')
+        comment = get_object_or_404(Comment, id=comment_id)
+
+        # Vérifiez si l'utilisateur a déjà mis le dislike
+       
+        user = Register.objects.get(id=user_id)
+
+        if user in comment.disliked_by.all():
+            # L'utilisateur a déjà disliké, annulez le dislike
+            comment.dislikes -= 1
+            comment.disliked_by.remove(user)
+        else:
+            # L'utilisateur n'a pas encore disliké, ajoutez le dislike
+            comment.dislikes += 1
+            comment.disliked_by.add(user)
+
+        # Assurez-vous de sauvegarder l'objet comment après les modifications
+        comment.save()
+
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
